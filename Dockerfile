@@ -39,7 +39,7 @@ RUN \
   php7-zip \
   unzip && \
   echo "**** install projectsend ****" && \
-  mkdir -p /app/projectsend && \
+  mkdir -p /app/www/public && \
   if [ -z ${PROJECTSEND_VERSION+x} ]; then \
     PROJECTSEND_VERSION=$(curl -sX GET "https://api.github.com/repos/projectsend/projectsend/releases/latest" \
     | awk '/tag_name/{print $4;exit}' FS='[""]'); \
@@ -49,9 +49,9 @@ RUN \
     "https://github.com/projectsend/projectsend/releases/download/${PROJECTSEND_VERSION}/projectsend-${PROJECTSEND_VERSION}.zip" && \
   unzip \
     /tmp/projectsend.zip -d \
-    /app/projectsend && \
-  mv /app/projectsend/upload /defaults/ && \
-  mv /app/projectsend /app/projectsend-tmp && \
+    /app/www/public && \
+  mv /app/www/public/upload /defaults/ && \
+  mv /app/www/public /app/www/public-tmp && \
   echo "**** cleanup ****" && \
     rm -rf \
     /tmp/*

@@ -1,8 +1,8 @@
 #!/usr/bin/with-contenv bash
 
-if [ -d /app/projectsend-tmp ]; then
+if [ -d /app/www/public-tmp ]; then
     echo "New container detected. Setting up app folder and fixing permissions."
-    mv /app/projectsend-tmp /app/projectsend
+    mv /app/www/public-tmp /app/www/public
     chown -R abc:abc /app
 fi
 
@@ -26,10 +26,6 @@ sed -i \
     -e "s#;*cgi.fix_pathinfo=.*#cgi.fix_pathinfo= 0#i" \
         /etc/php7/php.ini
 
-if ! grep -q 'config-v1' /config/nginx/site-confs/default; then
-    cp /defaults/default /config/nginx/site-confs
-fi
-
 # copy config
 PREV_DIR=$(pwd)
 
@@ -50,13 +46,13 @@ shopt -u dotglob
 cd "${PREV_DIR}" || exit
 
 # create symlinks
-[[ ! -L /app/projectsend/upload ]] && \
-    ln -sf /data/projectsend /app/projectsend/upload
+[[ ! -L /app/www/public/upload ]] && \
+    ln -sf /data/projectsend /app/www/public/upload
 
-[[ -f /app/projectsend/includes/sys.config.php ]] && \
-    rm /app/projectsend/includes/sys.config.php
-[[ ! -L /app/projectsend/includes/sys.config.php ]] && \
-    ln -sf /config/projectsend/sys.config.php /app/projectsend/includes/sys.config.php
+[[ -f /app/www/public/includes/sys.config.php ]] && \
+    rm /app/www/public/includes/sys.config.php
+[[ ! -L /app/www/public/includes/sys.config.php ]] && \
+    ln -sf /config/projectsend/sys.config.php /app/www/public/includes/sys.config.php
 
 # permissions
 echo "Fixing app data permissions."
